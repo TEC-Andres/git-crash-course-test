@@ -5,6 +5,6 @@ Keep the `|` pipes in place: every row needs the same number of cells as the hea
 
 | Category | My favorite |
 | --- | --- |
-| Food | _?_ |
-| Movie | _?_ |
-| Programming language | _?_ |
+| Food | _Pizza_ |
+| Movie | _Spiderman_ |
+| Programming language | _C++_ |
