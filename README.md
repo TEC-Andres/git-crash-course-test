@@ -8,8 +8,8 @@ finish four exercises, from your very first commit up to resolving merge conflic
 
 | # | Exercise | Status |
 | --- | --- | --- |
-| 1 | Setup and first commit | 👉 **You are here** |
-| 2 | Branch and Pull Request | 🔒 Coming up |
+| 1 | Setup and first commit | ✅ Done |
+| 2 | Branch and Pull Request | 👉 **You are here** |
 | 3 | Merge conflicts | 🔒 Coming up |
 | 4 | Rebase | 🔒 Coming up |
 
@@ -18,66 +18,82 @@ finish four exercises, from your very first commit up to resolving merge conflic
 
 ---
 
-## 0. Setup
+## 2. Branches and Pull Requests
 
-![Setup flow: use this template, your own repo, allow Actions, git clone](assets/step0-setup.svg)
+In real teams, nobody pushes straight to `main`. You work on a **branch** and ask for it to be
+merged with a **Pull Request (PR)**.
 
-1. Click **Use this template → Create a new repository** (top right of this page).
-   Choose **your account** as the owner, give it a name, and click **Create repository**.
-2. In **your new repository**, go to **Settings → Actions → General → Workflow permissions** and:
-   - select **Read and write permissions**
-   - tick **Allow GitHub Actions to create and approve pull requests**
-   - click **Save**
+![Branch lifecycle: create branch, commit, push, open PR, merge, delete branch, pull and clean up](assets/step2-branch-pr.svg)
 
-   GitHub Actions uses these permissions to update this page and to create the branches and
-   Pull Requests for exercises 3 and 4.
-3. Tell Git who you are (only once per computer):
+### 2.0 Download this page
 
-   ```bash
-   git config --global user.name "<Your Name>"
-   git config --global user.email "<you@example.com>"
-   ```
+GitHub Actions just added a commit to `main` (it changed this README). Bring it to your computer
+first:
 
-4. Clone your repository and move into it:
+```bash
+git pull
+```
 
-   ```bash
-   git clone https://github.com/<your-username>/<your-repo>.git
-   cd <your-repo>
-   ```
+### 2.1 Create a branch and commit on it
 
-> **How to read the commands:** text in `<angle brackets>` is a placeholder. Replace it, and
-> the brackets, with your own value.
+```bash
+git switch -c add-favorites          # create the branch AND switch to it
+```
 
----
+Fill in the table in `exercise-2/favorites.md`, then:
 
-## 1. Your first commit and push
+```bash
+git add exercise-2/favorites.md
+git commit -m "Fill in my favorites"
+```
 
-You'll work directly on `main`, the default branch.
+### 2.2 Push the branch
 
-![Working directory to staging area (git add) to local repository (git commit) to GitHub (git push)](assets/step1-commit.svg)
+```bash
+git push -u origin add-favorites     # -u links your local branch to the remote one
+```
 
-1. Open `exercise-1/hello.md` and fill in your information.
-2. See what changed, then **stage**, **commit** and **push** it:
+### 2.3 Open a Pull Request into `main`
 
-   ```bash
-   git status                      # hello.md shows as modified (red)
-   git diff                        # the exact lines you changed
-   git add exercise-1/hello.md     # stage it (green in git status)
-   git commit -m "Add my info to hello.md"
-   git push origin main
-   ```
+On GitHub you'll see a yellow banner, **add-favorites had recent pushes → Compare & pull request**.
+Click it, check that it says **base: main ← compare: add-favorites**, and click **Create pull request**.
 
-3. Refresh your repository on GitHub. Your commit appears at the top of the file list.
+*(Or, with the GitHub CLI: `gh pr create --base main --fill`.)*
 
-✅ **Done when:** `exercise-1/hello.md` on GitHub shows your info. Wait about 30 seconds and this
-page changes to Exercise 2.
+Wait for the **Check tables** check to turn green. If it's red, your table is broken. Fix it,
+commit and push again, and the PR updates automatically.
+
+### 2.4 Merge it
+
+Click **Merge pull request → Confirm merge**.
+
+### 2.5 Delete the branch
+
+Click **Delete branch** on the PR page. *(Or from the terminal: `git push origin --delete add-favorites`.)*
+
+### 2.6 Clean your workspace
+
+Your computer still has the old branch, and your local `main` doesn't have the merge yet:
+
+```bash
+git switch main                # go back to main
+git pull                       # download the merge
+git branch -d add-favorites    # delete the local branch (safe: it's merged)
+git fetch --prune              # forget remote branches that were deleted on GitHub
+git status                     # "nothing to commit, working tree clean"
+git branch -a                  # add-favorites is gone everywhere
+```
+
+✅ **Done when:** `git branch -a` shows no `add-favorites`, and `git status` is clean. This page
+changes to Exercise 3 once the PR is merged.
 
 ### Stuck?
 
 | What you see | What to do |
 | --- | --- |
-| `git push` asks for a password | GitHub needs a token or SSH key, not your password. Easiest: install the [GitHub CLI](https://cli.github.com) and run `gh auth login` |
-| This page didn't change after your push | Check step 0.2, then go to **Actions → Course progress → Run workflow** |
+| **Check tables**: "Row has 1 cell(s) but the header has 2" | A row is missing a cell. Count the `\|` pipes |
+| `git push` rejected: "fetch first" / "non-fast-forward" | Run `git pull`, then push again |
+| `git branch -d` says "not fully merged" | You haven't pulled the merge yet. Run `git switch main && git pull` first |
 
 ---
 
