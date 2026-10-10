@@ -10,6 +10,7 @@ Every table below must still render correctly after you resolve the conflicts.
 | 09:00 | Check-in |
 | 10:00 | Kickoff talk |
 | 11:30 | Hacking starts |
+| 11:00 | Git workshop |
 | 12:00 | Lunch |
 | 17:00 | Demos |
 
@@ -35,4 +36,5 @@ Every table below must still render correctly after you resolve the conflicts.
 | --- | --- | --- |
 | Book the room | Ana | Done |
 | Order food | Marta | In progress |
+| Order food | Luis | Done |
 | Print badges | Sofia | To do |
