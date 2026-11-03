@@ -7,3 +7,4 @@ Your work on the feature branch:
 - Feature step 3 of 9
 - Feature step 4 of 9
 - Feature step 5 of 9
+- Feature step 6 of 9
