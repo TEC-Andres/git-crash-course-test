@@ -21,6 +21,9 @@ finish five exercises, from your very first commit up to resolving merge conflic
 
 ---
 
+> [!WARNING]
+> **Not done yet:** The PR is merged, but the branch `add-favorites` still exists on GitHub. Delete it (step 2.5).
+
 ## 2. Branches and Pull Requests
 
 In real teams, nobody pushes straight to `main`. You work on a **branch** and ask for it to be
