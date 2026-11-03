@@ -1,0 +1,57 @@
+name: Course progress
+
+# Rewrites README.md so it shows only the exercise the student is on.
+# Runs on every push to main. Run it manually to refresh.
+on:
+  push:
+    branches: [main]
+  delete:  # exercise 2 is done only once its branch is deleted on GitHub
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: course-setup
+  cancel-in-progress: false
+
+jobs:
+  readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Latest main, not the pushed SHA: a setup workflow may have pushed while we waited.
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Show the next exercise
+        env:
+          GH_TOKEN: ${{ github.token }}  # to read the exercise 5 PR description
+        run: |
+          python .github/course/render_readme.py
+          git add README.md assets/hero-*.svg
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Course progress: update README"
+          git push origin "HEAD:${{ github.event.repository.default_branch }}"
+      - name: Set up exercise 3 or 4 when the student reaches it
+        env:
+          BASE_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          current=$(python -c "import sys; sys.path.insert(0, '.github/course'); import render_readme as r; print(r.current_exercise()[0])")
+          echo "Student is on exercise $current"
+          # Only when the files don't exist yet, so a student's work is never reset.
+          if [[ "$current" == 3 && ! -f exercise-3/hackathon-plan.md ]]; then
+            bash .github/course/setup_ex3.sh
+          elif [[ "$current" == 4 && ! -f exercise-4/feature-notes.md ]]; then
+            BEHIND=10 AHEAD=9 bash .github/course/setup_ex4.sh
+          fi

@@ -1,0 +1,25 @@
+name: "Exercise 3 · Create merge conflicts"
+
+# Run manually: Actions tab -> "Exercise 3 · Create merge conflicts" -> Run workflow.
+# Re-running resets the exercise.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: course-setup
+  cancel-in-progress: false
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create two conflicting branches 
+        run: bash .github/course/setup_ex3.sh
+        env:
+          BASE_BRANCH: ${{ github.event.repository.default_branch }}

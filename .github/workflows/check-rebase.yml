@@ -1,0 +1,20 @@
+name: Check rebase
+
+# Exercise 4: the branch ex4/feature must be rebased onto main
+# (0 commits behind, no merge commits, all feature commits + yours kept).
+on:
+  push:
+    branches: ["ex4/**"]
+
+permissions:
+  contents: read
+
+jobs:
+  rebase:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Is the branch rebased?
+        run: bash .github/course/check_rebase.sh origin/main HEAD 10
